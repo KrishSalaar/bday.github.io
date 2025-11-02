@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To CHERRY!!!!🎁</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* PAGE 1 - Hero with Background Photo */
+        .page-1 {
+            /* Background image moved into an <img> (see .hero-bg) so the file can be served from the same folder
+               and to make embedding or future swapping easier. */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Remove overlay on page-1 so only the photo shows */
+        .page-1::before {
+            display: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            max-width: 800px;
+        }
+
+        /* Hero background image element (uses local Bestie.jpg file in same folder as this HTML) */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none; /* allow clicks to pass through */
+            z-index: 0; /* sit behind the overlay (z-index:1) and hero content (z-index:2) */
+        }
+
+        /* Hide hero text and scroll indicator on page-1 so only the photo is visible */
+        .page-1 .hero-content,
+        .page-1 .scroll-down {
+            display: none;
+        }
+
+        /* Right-side wishes panel shown on page-1 */
+        .wishes-panel {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 420px;
+            width: 35%;
+            background: rgba(255,255,255,0.9);
+            color: #111;
+            padding: 24px 28px;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 3; /* above image and (previous) overlay */
+            backdrop-filter: blur(4px);
+        }
+
+        .wishes-panel h1 {
+            font-size: 1.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .wishes-panel p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #222;
+        }
+
+        @media (max-width: 768px) {
+            .wishes-panel {
+                position: static;
+                transform: none;
+                width: 90%;
+                margin: 20px auto 0 auto;
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        .hero-content p {
+            font-size: 2rem;
+            line-height: 1.8;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            font-size: 2.5rem;
+            color: white;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* PAGE 2 - Flip Cards with Photos */
+        .page-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 80px 20px;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 3rem;
+            text-align: center;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        .flip-card {
+            height: 400px;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .flip-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-front {
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        /* removed decorative gradient so only the photo and text are visible on the front */
+
+        .card-front-text {
+            position: relative;
+            z-index: 1;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .card-back {
+            /* Use the same photo as the front (set per-card inline) and show text on top */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-back h3 {
+            font-size: 2rem;
+            color: white; /* keep text readable on the photo */
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            margin-bottom: 1rem;
+        }
+
+        .card-back p {
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+            line-height: 1.6;
+        }
+
+        /* PAGE 3 - Final Wishes */
+        .page-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            position: relative;
+        }
+
+        .page-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('selfie-photo.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+        }
+
+        .final-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .selfie-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: floatIn 1.5s ease-out;
+        }
+
+        .selfie-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .wishes-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInScale 1.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .wishes-box h2 {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .wishes-box p {
+            font-size: 1.5rem;
+            color: #333;
+            line-height: 2;
+            margin-bottom: 1.5rem;
+        }
+
+        .signature {
+            font-size: 1.8rem;
+            color: #764ba2;
+            font-weight: bold;
+            margin-top: 2rem;
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 9999;
+            animation: confetti-fall 4s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-content p {
+                font-size: 1.3rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .flip-card {
+                height: 350px;
+            }
+
+            .card-back h3 {
+                font-size: 1.5rem;
+            }
+
+            .card-back p {
+                font-size: 1.1rem;
+            }
+
+            .wishes-box h2 {
+                font-size: 2rem;
+            }
+
+            .wishes-box p {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1: Hero with Best Friend's Photo Background -->
+    <div class="page page-1">
+        <img class="hero-bg" src="Bestie.jpg" alt="Best Friend">
+        <aside class="wishes-panel" role="complementary" aria-label="Birthday wishes">
+            <h1>🎉 Happy Birthday Cherry 🥳</h1>
+            <p>HAPPY 21 😉🥂🥂</p>
+        </aside>
+        <div class="hero-content">
+            <h1>🎉 Happy Birthday Cherry 🥳</h1>
+            <p>To the most amazing best friend anyone could ask for! Today is all about celebrating YOU and the incredible person you are. Get ready for some fun surprises below! 😄</p>
+        </div>
+        <div class="scroll-down" onclick="document.querySelector('.page-2').scrollIntoView({behavior: 'smooth'})">
+            ↓
+        </div>
+    </div>
+
+    <!-- PAGE 2: Flip Cards with Teasing Photos -->
+    <div class="page page-2">
+        <h2 class="page-title">😂 SHADES OF CHERRY 😂</h2>
+        <div class="cards-container">
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo1.jpg');">
+                    <div class="card-front-text">Cherry Pose</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('cherryPose.jpg');">
+                    <h3>Handsome Lad😎</h3>
+                    <p>cherry tappa evaru ivvaleni pose</p>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo2.jpg');">
+                    <div class="card-front-text">Naughty Cherry</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('NaughtyCherry.jpg');">
+                    <h3>Aye Donga</h3>
+                    <p>Lab rules break chesina ghanatha neeke😆</p>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo3.jpg');">
+                    <div class="card-front-text">Smart Cherry</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('ThinkingCherry.jpg');">
+                    <h3>AAAAATTTTTT</h3>
+                    <p>Thanu entha smartooo ani aalochistunna cherry🤣</p>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo4.jpg');">
+                    <div class="card-front-text">Rowdy Cherry</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('RowdyCherry.jpg');">
+                    <h3>Rowdy Ramudu</h3>
+                    <p>Evadu naaku edurochina vaadike risku, nen evadiki edurellina vaadike risku😤</p>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo5.jpg');">
+                    <div class="card-front-text">Devotional Cherry</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('DevotionalCherry.jpg');">
+                    <h3>🤪 Bhaktha Cherry</h3>
+                    <p>Ippudu konchem bhakthudila undaam 😄</p>
+                </div>
+            </div>
+
+            <div class="flip-card">
+                <div class="card-face card-front" style="background-image: url('photo4.jpg');">
+                    <div class="card-front-text">Cute Cherry</div>
+                </div>
+                <div class="card-face card-back" style="background-image: url('crossheadCherry.jpg');">
+                    <h3>Selfie Raja</h3>
+                    <p>Ah andaaniki ah facecut ki manam iche value entha andi !!😉</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: Final Wishes with Selfie -->
+    <div class="page page-3">
+        <div class="final-content">
+            <div class="selfie-container">
+                <img src="momentsWithCherry.jpg" alt="Our Selfie">
+            </div>
+            <div class="wishes-box">
+                <h2>💙 Real Talk 💙</h2>
+                <p>Dear Best Friend, a.k.a Cherry💖. Nen neeku eppati nuncho cheptuu ostunna vishayame malli malli cheptunna</p>
+                <p>You are good boy and a trust worthy person. Nen chaala lucky to have you as boy bestie🤩. Naa health baalenapudu nuv choopinchina care unforgettable asala🔥</p>
+                <p>And my dear best buddy, I know your worth. Don't waste your time in thinking non sense. Work Hard, Prove yourself, SHINE AND SHOW💪 to those people who underestimated you</p>
+                <div class="signature">Once again Happy 21 raa Cherry💖</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Confetti has been disabled so the hero photo displays without colored decorations.
+        function createConfetti() {
+            // no-op: confetti disabled
+        }
+
+        // Smooth scroll to sections
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click listener to scroll indicator
+            const scrollIndicator = document.querySelector('.scroll-down');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function() {
+                    document.querySelector('.page-2').scrollIntoView({behavior: 'smooth'});
+                });
+            }
+        });
+    </script>
+</body>
+</html>
